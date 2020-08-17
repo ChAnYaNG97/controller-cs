@@ -1,0 +1,7 @@
+domain: cloudplus.io
+repo: controller-cs
+resources:
+- group: cs
+  kind: AliyunCK
+  version: v1
+version: "2"

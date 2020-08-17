@@ -1,0 +1,20 @@
+# permissions for end users to view aliyuncks.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: aliyunck-viewer-role
+rules:
+- apiGroups:
+  - cs.cloudplus.io
+  resources:
+  - aliyuncks
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cs.cloudplus.io
+  resources:
+  - aliyuncks/status
+  verbs:
+  - get

@@ -1,0 +1,7 @@
+apiVersion: cs.cloudplus.io/v1
+kind: AliyunCK
+metadata:
+  name: aliyunck-sample
+spec:
+  # Add fields here
+  foo: bar
