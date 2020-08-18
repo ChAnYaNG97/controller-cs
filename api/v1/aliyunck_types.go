@@ -20,6 +20,16 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
+type PhaseType string
+
+const (
+	Phase_None   PhaseType = ""
+	Phase_Create PhaseType = "Creating"
+	Phase_Run    PhaseType = "Running"
+	Phase_Delete PhaseType = "Deleting"
+	Phase_Error  PhaseType = "Error"
+)
+
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
@@ -28,14 +38,26 @@ type AliyunCKSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	// Foo is an example field of AliyunCK. Edit AliyunCK_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	// Region
+	Region			string `json:"region"`
+
+	// Machine Type
+	InstanceType	string `json:"instance_type"`
 }
 
 // AliyunCKStatus defines the observed state of AliyunCK
 type AliyunCKStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
+
+
+	// Status
+	Phase		PhaseType `json:"status"`
+
+	// Cluster Id
+	ClusterId	string `json:"cluster_id"`
+	VPCId		string `json:"vpc_id"`
+
 }
 
 // +kubebuilder:object:root=true

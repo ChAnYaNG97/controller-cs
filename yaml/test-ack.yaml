@@ -1,0 +1,9 @@
+apiVersion: cs.cloudplus.io/v1
+kind: AliyunCK
+metadata:
+  name: aliyunck-example
+spec:
+  # Add fields here
+
+  region: "cn-hangzhou"
+  instance_type: "md4.xlarge"
