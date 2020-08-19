@@ -6,4 +6,4 @@ spec:
   # Add fields here
 
   region: "cn-hangzhou"
-  instance_type: "md4.xlarge"
+  instance_type: "ecs.n1.medium"

@@ -39,10 +39,10 @@ type AliyunCKSpec struct {
 	// Important: Run "make" to regenerate code after modifying this file
 
 	// Region
-	Region			string `json:"region"`
+	Region string `json:"region"`
 
 	// Machine Type
-	InstanceType	string `json:"instance_type"`
+	InstanceType string `json:"instance_type"`
 }
 
 // AliyunCKStatus defines the observed state of AliyunCK
@@ -52,12 +52,11 @@ type AliyunCKStatus struct {
 
 
 	// Status
-	Phase		PhaseType `json:"status"`
+	Phase PhaseType `json:"status"`
 
 	// Cluster Id
-	ClusterId	string `json:"cluster_id"`
-	VPCId		string `json:"vpc_id"`
-
+	ClusterId string `json:"cluster_id"`
+	VPCId     string `json:"vpc_id"`
 }
 
 // +kubebuilder:object:root=true

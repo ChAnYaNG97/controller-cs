@@ -17,6 +17,7 @@ limitations under the License.
 package main
 
 import (
+	"controller-cs/driver"
 	"flag"
 	"os"
 
@@ -67,9 +68,10 @@ func main() {
 	}
 
 	if err = (&controllers.AliyunCKReconciler{
-		Client: mgr.GetClient(),
-		Log:    ctrl.Log.WithName("controllers").WithName("AliyunCK"),
-		Scheme: mgr.GetScheme(),
+		Client:      mgr.GetClient(),
+		Log:         ctrl.Log.WithName("controllers").WithName("AliyunCK"),
+		Scheme:      mgr.GetScheme(),
+		CloudClient: driver.GetAliyunClient(),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "AliyunCK")
 		os.Exit(1)

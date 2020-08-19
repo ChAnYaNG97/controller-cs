@@ -2,9 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bd79ddef-0ef3-46dd-8c2c-766b1ae25737" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/driver/config/aliyun.config" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aa.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/api/v1/aliyunck_types.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1/aliyunck_types.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controllers/aliyunck_controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/aliyunck_controller.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/driver/aliyun.go" beforeDir="false" afterPath="$PROJECT_DIR$/driver/aliyun.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/driver/interface.go" beforeDir="false" afterPath="$PROJECT_DIR$/driver/interface.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yaml/test-ack.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/yaml/test-ack.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,5 +57,18 @@
       <screen x="0" y="23" width="1280" height="777" />
     </state>
     <state x="440" y="252" key="#Go_Modules/0.23.1280.777@0.23.1280.777" timestamp="1597650773575" />
+    <state x="542" y="291" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1597735647424">
+      <screen x="0" y="23" width="1920" height="1057" />
+    </state>
+    <state x="361" y="220" key="#com.intellij.fileTypes.FileTypeChooser/0.23.1280.777@0.23.1280.777" timestamp="1597651008234" />
+    <state x="542" y="291" key="#com.intellij.fileTypes.FileTypeChooser/0.23.1920.1057@0.23.1920.1057" timestamp="1597735647424" />
+    <state x="658" y="306" width="604" height="490" key="find.popup" timestamp="1597820240016">
+      <screen x="0" y="23" width="1920" height="1057" />
+    </state>
+    <state x="658" y="306" width="604" height="490" key="find.popup/0.23.1920.1057@0.23.1920.1057" timestamp="1597820240016" />
+    <state x="1459" y="404" key="search.everywhere.popup" timestamp="1597808781469">
+      <screen x="0" y="23" width="1920" height="1057" />
+    </state>
+    <state x="1459" y="404" key="search.everywhere.popup/0.23.1920.1057@0.23.1920.1057" timestamp="1597808781469" />
   </component>
 </project>

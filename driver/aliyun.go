@@ -1,30 +1,38 @@
 package driver
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk"
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
-	"strings"
+	"github.com/prometheus/common/log"
+	"io/ioutil"
 )
 
 const (
-	AliyunAccessKey    = "<your access key>"
-	AliyunAccessSecret = "<your access secret>"
+	AliyunAccessKey    = "<your accessKey>"
+	AliyunAccessSecret = "<your accessSecret>"
 )
 
 type AliyunClient struct {
 	*sdk.Client
 }
 
-func NewAliyunClient() (*AliyunClient, error) {
+var client *AliyunClient
+
+func GetAliyunClient() *AliyunClient {
+	if client != nil {
+		return nil
+	}
 	client, err := sdk.NewClientWithAccessKey("default", AliyunAccessKey, AliyunAccessSecret)
 	if err != nil {
-		return nil, err
+		return nil
 	}
+
 	return &AliyunClient{
 		client,
-	}, err
+	}
 }
 
 func (client *AliyunClient) CreateCluster(req *CreateRequest) (*CreateResponse, error) {
@@ -37,103 +45,40 @@ func (client *AliyunClient) CreateCluster(req *CreateRequest) (*CreateResponse, 
 	request.PathPattern = "/clusters"
 	request.Headers["Content-Type"] = "application/json"
 	request.QueryParams["RegionId"] = "cn-hangzhou"
-	body := `{
-	   "cluster_type": "Kubernetes",
-	   "name": "#NAME#",
-	   "region_id": "cn-hangzhou",
-	   "disable_rollback": true,
-	   "timeout_mins": 60,
-	   "kubernetes_version": "1.16.9-aliyun.1",
-	   "snat_entry": false,
-	   "endpoint_public_access": false,
-	   "cloud_monitor_flags": false,
-	   "deletion_protection": false,
-	   "node_cidr_mask": "26",
-	   "proxy_mode": "ipvs",
-	   "tags": [],
-	   "addons": [
-	       {
-	           "name": "flannel"
-	       },
-	       {
-	           "name": "csi-plugin"
-	       },
-	       {
-	           "name": "csi-provisioner"
-	       },
-	       {
-	           "name": "nginx-ingress-controller",
-	           "config": "{\"IngressSlbNetworkType\":\"internet\"}"
-	       }
-	   ],
-	   "os_type": "Linux",
-	   "platform": "AliyunLinux",
-	   "node_port_range": "30000-32767",
-	   "login_password": "YANGchen970617",
-	   "cpu_policy": "none",
-	   "master_count": 3,
-	   "master_vswitch_ids": [
-	       "vsw-bp1bgp5v4duhtkykk8t4h",
-	       "vsw-bp1bgp5v4duhtkykk8t4h",
-	       "vsw-bp1bgp5v4duhtkykk8t4h"
-	   ],
-	   "master_instance_types": [
-	       "ecs.n1.medium",
-	       "ecs.n1.medium",
-	       "ecs.n1.medium"
-	   ],
-	   "master_system_disk_category": "cloud_ssd",
-	   "master_system_disk_size": 120,
-	   "runtime": {
-	       "name": "docker",
-	       "version": "19.03.5"
-	   },
-	   "worker_instance_types": [
-	       "ecs.n1.medium"
-	   ],
-	   "num_of_nodes": 3,
-	   "worker_system_disk_category": "cloud_efficiency",
-	   "worker_system_disk_size": 120,
-	   "vpcid": "vpc-bp1tz33v9lv47nptrykbu",
-	   "worker_vswitch_ids": [
-	       "vsw-bp1bgp5v4duhtkykk8t4h"
-	   ],
-	   "is_enterprise_security_group": true,
-	   "container_cidr": "172.20.0.0/16",
-	   "service_cidr": "172.21.0.0/20"
-	}`
-	body = strings.ReplaceAll(body, "#NAME#", req.Name)
+	body, err := ioutil.ReadFile("driver/config/aliyun.config")
+	if err != nil {
+		log.Error("readfile error", err)
+		return nil, err
+	}
 
-	var bodyMap map[string]interface{}
-	_ = json.Unmarshal([]byte(body), &bodyMap)
-	bodyMap["name"] = req.Name
-	bodyBytes, _ := json.Marshal(bodyMap)
-	body = string(bodyBytes)
+	body = bytes.ReplaceAll(body, []byte("#NAME#"), []byte(req.Name))
+	body = bytes.ReplaceAll(body, []byte("#REGION#"), []byte(req.Region))
+	body = bytes.ReplaceAll(body, []byte("#INSTANCE_TYPE"), []byte(req.InstanceType))
 
-	request.Content = []byte(body)
+	request.Content = body
 	response, err := client.ProcessCommonRequest(request)
 	if err != nil {
 		return nil, err
 	}
-
 	var respMap map[string]interface{}
 	_ = json.Unmarshal(response.GetHttpContentBytes(), &respMap)
 	clusterId, ok := respMap["cluster_id"].(string)
 	if ok {
 		return &CreateResponse{
 			ClusterId: clusterId,
+			VPCId:     "vpc-bp1tz33v9lv47nptrykbu",
 		}, nil
 	}
 	return nil, fmt.Errorf("create cluster error")
 }
 
-func (client *AliyunClient) DeleteCluster(clusterId string) error {
+func (client *AliyunClient) DeleteCluster(req *CommonRequest) error {
 	request := requests.NewCommonRequest()
 	request.Method = "DELETE"
 	request.Scheme = "https" // https | http
 	request.Domain = "cs.aliyuncs.com"
 	request.Version = "2015-12-15"
-	request.PathPattern = "/clusters/" + clusterId
+	request.PathPattern = "/clusters/" + req.ClusterId
 	request.Headers["Content-Type"] = "application/json"
 	request.QueryParams["RegionId"] = "cn-hangzhou"
 	body := `{}`
@@ -146,13 +91,13 @@ func (client *AliyunClient) DeleteCluster(clusterId string) error {
 	return nil
 }
 
-func (client *AliyunClient) GetClusterStatus(clusterId string) (*GetStatusReponse, error) {
+func (client *AliyunClient) GetClusterStatus(req *CommonRequest) (*GetStatusResponse, error) {
 	request := requests.NewCommonRequest()
 	request.Method = "GET"
 	request.Scheme = "https" // https | http
 	request.Domain = "cs.aliyuncs.com"
 	request.Version = "2015-12-15"
-	request.PathPattern = "/clusters/" + clusterId
+	request.PathPattern = "/clusters/" + req.ClusterId
 	request.Headers["Content-Type"] = "application/json"
 	request.QueryParams["RegionId"] = "cn-hangzhou"
 	body := `{}`
@@ -163,9 +108,17 @@ func (client *AliyunClient) GetClusterStatus(clusterId string) (*GetStatusRepons
 	}
 	var respMap map[string]interface{}
 	_ = json.Unmarshal(response.GetHttpContentBytes(), &respMap)
-	status, ok := respMap["status"].(string)
+	status, ok := respMap["state"].(string)
+
+	//running：集群正在运行的。
+	//stopped：集群已经停止运行。
+	//deleted：集群已经被删除。
+	//delete_failed：集群删除失败。
+	//failed：集群创建失败。
+
 	if ok {
-		return &GetStatusReponse{
+		fmt.Println(status)
+		return &GetStatusResponse{
 			Status: status,
 		}, nil
 	}
@@ -174,4 +127,49 @@ func (client *AliyunClient) GetClusterStatus(clusterId string) (*GetStatusRepons
 
 func (client *AliyunClient) Print(text string) {
 	fmt.Println(text)
+}
+
+func (client *AliyunClient) IsClusterExist(req *CommonRequest) (*ExistResponse, error) {
+	request := requests.NewCommonRequest()
+	request.Method = "GET"
+	request.Scheme = "https" // https | http
+	request.Domain = "cs.aliyuncs.com"
+	request.Version = "2015-12-15"
+	request.PathPattern = "/clusters/" + req.ClusterId
+	request.Headers["Content-Type"] = "application/json"
+	request.QueryParams["RegionId"] = "cn-hangzhou"
+	body := `{}`
+	request.Content = []byte(body)
+	response, _ := client.ProcessCommonRequest(request)
+	//if err != nil {
+	//
+	//	fmt.Println("IsClusterExist Response")
+	//	fmt.Println(response, err)
+	//	return nil, err
+	//}
+	var respMap map[string]interface{}
+	_ = json.Unmarshal(response.GetHttpContentBytes(), &respMap)
+	errCode, ok := respMap["code"].(string)
+
+	//running：集群正在运行的。
+	//stopped：集群已经停止运行。
+	//deleted：集群已经被删除。
+	//delete_failed：集群删除失败。
+	//failed：集群创建失败。
+
+	if ok && errCode == "ErrorQueryCluster" {
+		fmt.Println(errCode)
+		return &ExistResponse{
+			Exist: false,
+		}, nil
+	}
+
+	_, ok = respMap["state"].(string)
+	if ok {
+		return &ExistResponse{
+			Exist: true,
+		}, nil
+	}
+	return nil, fmt.Errorf("cluster exists error")
+
 }
