@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bd79ddef-0ef3-46dd-8c2c-766b1ae25737" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/driver/aliyun.go" beforeDir="false" afterPath="$PROJECT_DIR$/driver/aliyun.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/v1/aliyunck_types.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/v1/aliyunck_types.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/crd/bases/cs.cloudplus.io_aliyuncks.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/crd/bases/cs.cloudplus.io_aliyuncks.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

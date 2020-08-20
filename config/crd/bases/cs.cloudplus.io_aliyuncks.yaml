@@ -8,26 +8,13 @@ metadata:
   creationTimestamp: null
   name: aliyuncks.cs.cloudplus.io
 spec:
-  additionalPrinterColumns:
-  - JSONPath: .status.cluster_id
-    name: CLUSTER-ID
-    type: string
-  - JSONPath: .status.vpc_id
-    name: VPC-ID
-    type: string
-  - JSONPath: .status.status
-    name: STATUS
-    type: string
   group: cs.cloudplus.io
   names:
     kind: AliyunCK
     listKind: AliyunCKList
     plural: aliyuncks
-    shortNames:
-    - ack
     singular: aliyunck
   scope: Namespaced
-  subresources: {}
   validation:
     openAPIV3Schema:
       description: AliyunCK is the Schema for the aliyuncks API

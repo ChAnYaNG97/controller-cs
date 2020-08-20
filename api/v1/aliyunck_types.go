@@ -50,7 +50,6 @@ type AliyunCKStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-
 	// Status
 	Phase PhaseType `json:"status"`
 
