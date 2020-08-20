@@ -23,16 +23,18 @@ var client *AliyunClient
 
 func GetAliyunClient() *AliyunClient {
 	if client != nil {
-		return nil
+		return client
 	}
-	client, err := sdk.NewClientWithAccessKey("default", AliyunAccessKey, AliyunAccessSecret)
+	var err error
+	c, err := sdk.NewClientWithAccessKey("default", AliyunAccessKey, AliyunAccessSecret)
 	if err != nil {
 		return nil
 	}
-
-	return &AliyunClient{
-		client,
+	client = &AliyunClient{
+		Client: c,
 	}
+
+	return client
 }
 
 func (client *AliyunClient) CreateCluster(req *CreateRequest) (*CreateResponse, error) {
